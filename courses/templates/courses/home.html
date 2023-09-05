@@ -1,0 +1,50 @@
+{% extends 'courses/main-layout.html' %}
+{% block main_section %}
+    {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    <div class="courses">
+    {% for course in courses %}
+
+        <div class="course">
+            <h3>{{ course.title }}</h3>
+
+            {% if course.img %}
+                <img src="{{ course.img.url}}" alt="{{ course.title }}">
+            {% else %}
+                <img src="/pictures/default.jpg" alt="{{ course.title }}">
+            {% endif %}
+
+            <a href="{{ course.get_absolute_url }}" class="btn btn-outline-warning mt-3">Look</a>
+        </div>
+
+    {% endfor %}
+    </div>
+    <div class="d-flex  justify-content-center">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="/" class="btn btn-outline-danger ">Beginning</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-danger ms-2">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <button class="btn btn-danger ms-2">{{ num }}</button>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="btn btn-outline-danger ms-2">{{ num }}</a>
+
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-danger ms-2">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-danger ms-2">Last</a>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endblock %}

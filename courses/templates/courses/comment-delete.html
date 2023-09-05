@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    <p>Вы уверены, что хотите удалить этот комментарий?</p>
+    <button type="submit">Да, уверен</button>
+    <a href="{% url 'course-detail' course_slug %}">Нет, вернуться назад</a>
+</form>

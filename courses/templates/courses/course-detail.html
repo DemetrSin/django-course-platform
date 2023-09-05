@@ -1,0 +1,73 @@
+{% extends 'courses/main-layout.html' %}
+{% load crispy_forms_tags %}
+{% block main_section %}
+    {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+<div class="container">
+    <div class="main-block">
+
+        <div class="one-course">
+            <h3>{{ object.title }}</h3>
+            <p>Author: {{ object.author.username }}</p>
+
+            {% if object.img %}
+                <img src="{{ object.img.url}}" alt="{{ object.title }}" class="course-img">
+            {% else %}
+                <img src="/pictures/default.jpg" alt="{{ object.title }}" class="course-img">
+            {% endif %}
+        </div>
+
+        <div class="aside-course">
+            <h3>Course description</h3>
+            <p>{{ object.description }}</p>
+            {% if object.free == True %}
+                <ul>
+                {% for lesson in lessons %}
+                    <li><a href="{{ lesson.get_absolute_url }}">{{ lesson.title }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                {% if  user.is_authenticated == False %}
+                    <p><a href="{% url 'registration' %}">Register</a> on the site or <a href="{% url 'user' %}">LogIn
+                    </a>  and buy a subscription to see this course</p>
+                {% else %}
+                    {% if user.profile.account_type == 'Full pack' %}
+                        <ul>
+                        {% for lesson in lessons %}
+                            <li><a href="{{ lesson.get_absolute_url }}">{{ lesson.title }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p><a href="{% url 'tariffs' %}">You need to buy</a>  a subscription to see this course</p>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="form-section">
+        <form method="POST" enctype="multipart/form-data" class="form-register mt-4">
+            {% csrf_token %}
+            {{ comment_form|crispy }}
+            <button class="btn btn-outline-warning" type="submit">Add</button>
+        </form>
+        <hr>
+        <div class="my-3">
+            {% for comment in comments %}
+                <h5>{{ comment.author }}</h5>
+                <p>{{ comment.comment }}</p>
+                {% if user == comment.author %}
+                    <a href="{% url 'comment-delete' course_id=object.id pk=comment.id %}" class="btn btn-outline-warning">Delete</a>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: gray;
+}
+
+.messages li{
+    font-size: 45px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.courses, .main-block {
+    display: flex;
+    justify-content: space-between;
+    /*flex-wrap: nowrap;*/
+    align-items: center;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.courses .course {
+    width: 30%;
+}
+
+.courses .course img{ width: 100% }
+
+.course-img{
+    width: 100%;
+}
+
+.main-block {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.one-course {
+    margin-right: 100px;
+    width: 50%;
+}
+
+footer {
+    width: 80%;
+    margin-left: 10%;
+}
